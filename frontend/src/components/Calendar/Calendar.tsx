@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { months } from '../../mock-data/monthsInAYear';
-import { days } from '../../mock-data/days';
+import { daysOfWeek } from '../../mock-data/days';
 import { getDaysInCurrentMonth } from '../../utils/getDaysInCurrentMonth';
 import CalendarHeader from './CalendarHeader/CalendarHeader';
 import CalendarDays from './CalendarDays/CalendarDays';
 import Card from '../Card/Card';
 import Day from './Day/Day';
+import { getBlankDays } from '../../utils/getBlankDays';
 
 interface CalendarProps {
   currentMonth: string;
@@ -14,16 +15,25 @@ interface CalendarProps {
 const Calendar = () => {
   const date = new Date();
   const today = date.getDate();
+  const dayNameIndex = date.getDay();
   const monthIndex = date.getMonth();
   const [currentMonthIndex, setCurrentMonthIndex] =
     useState<number>(monthIndex);
   const [selectedDay, setSelectedDay] = useState<number>(today);
+  const [selectedDayNameIndex, setSelectedDayNameIndex] =
+    useState<number>(dayNameIndex);
 
   const month = months[currentMonthIndex];
   const currentFullYear = date.getFullYear();
   const daysInAMonth = useMemo(() => {
     return getDaysInCurrentMonth(currentFullYear, currentMonthIndex);
   }, [currentMonthIndex]);
+
+  const blankDays = getBlankDays(
+    daysOfWeek,
+    currentFullYear,
+    currentMonthIndex
+  );
 
   const onMonthChange = (direction: string) => {
     if (direction === 'Previous') {
@@ -45,18 +55,23 @@ const Calendar = () => {
       <Card>
         <CalendarHeader
           monthName={month.name}
-          dayNames={days}
+          dayNames={daysOfWeek}
           fullYear={currentFullYear}
           onMonthChange={onMonthChange}
         />
         <CalendarDays
+          blankDays={blankDays}
           numberOfDays={daysInAMonth}
           activeDayIndex={selectedDay}
           onClick={onDaySelect}
         />
       </Card>
       <Card className="mt-3 h-[300px]">
-        <Day number={selectedDay} name="Tuesday" expenses={1.23} />
+        <Day
+          number={selectedDay}
+          name={daysOfWeek[selectedDayNameIndex]}
+          expenses={1.23}
+        />
       </Card>
     </div>
   );

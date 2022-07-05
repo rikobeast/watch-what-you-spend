@@ -1,23 +1,9 @@
-export const days = [
-  {
-    name: 'Monday',
-  },
-  {
-    name: 'Tuesday',
-  },
-  {
-    name: 'Wednesday',
-  },
-  {
-    name: 'Thursday',
-  },
-  {
-    name: 'Friday',
-  },
-  {
-    name: 'Saturday',
-  },
-  {
-    name: 'Sunday',
-  },
+export const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];

@@ -2,13 +2,9 @@ import React from 'react';
 import Button from '../../Button/Button';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-interface DayNames {
-  name: string;
-}
-
 interface CalendarHeaderProps {
   monthName: string;
-  dayNames: DayNames[];
+  dayNames: string[];
   fullYear: number;
   onMonthChange: (direction: string) => void;
 }
@@ -47,8 +43,8 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         <h1 className="text-h1 p-3 w-[25%] text-right">{fullYear}</h1>
       </div>
       <div className="max-w-full w-full border-t border-b h-[40px] grid grid-cols-7 grid-flow-row gap-4 pl-6 pr-6 items-center justify-items-center">
-        {dayNames.map((day: any) => (
-          <p key={day.name}>{day.name.slice(0, 3)}</p>
+        {dayNames.map((day: string) => (
+          <p key={day}>{day.slice(0, 3)}</p>
         ))}
       </div>
     </>
