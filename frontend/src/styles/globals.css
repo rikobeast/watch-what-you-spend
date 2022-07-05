@@ -1,0 +1,6 @@
+html {
+  @apply font-body;
+}
+h1 {
+  @apply text-h1;
+}
