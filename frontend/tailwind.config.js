@@ -16,8 +16,11 @@ module.exports = {
       xl: '1.9rem',
     },
     colors: {
+      black: '#000',
+      white: '#fff',
+      'black-40': 'rgba(0, 0, 0, 0.4)',
       primary: '#0E7C7B',
-      'primary-30': 'rgba(14, 124, 123,0.3)',
+      'primary-30': 'rgba(14, 124, 123, 0.3)',
       secondary: '#17BEBB',
       'light-blue': '#D4F4DD',
       red: '#D62246',

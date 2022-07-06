@@ -20,6 +20,7 @@ const Calendar = () => {
   const [currentMonthIndex, setCurrentMonthIndex] =
     useState<number>(monthIndex);
   const [selectedDay, setSelectedDay] = useState<number>(today);
+  const [expense, setExpense] = useState<number>(0);
 
   const nameOfSelectedDay = useMemo(
     () =>
@@ -56,16 +57,20 @@ const Calendar = () => {
     }
   };
 
-  useEffect(() => {
-    setSelectedDayName(nameOfSelectedDay);
-  }, [selectedDay]);
-
   const onDaySelect = (dayNumber: number) => {
     setSelectedDay(dayNumber);
   };
 
+  const handleSubmit = (value: number) => {
+    setExpense(value);
+  };
+
+  useEffect(() => {
+    setSelectedDayName(nameOfSelectedDay);
+  }, [selectedDay]);
+
   return (
-    <div className="max-w-full min-w-[600px] w-[600px] h-screen bg-secondary border p-2">
+    <div className=" h-screen p-2">
       <Card>
         <CalendarHeader
           monthName={month.name}
@@ -81,7 +86,12 @@ const Calendar = () => {
         />
       </Card>
       <Card className="mt-3 ">
-        <Day number={selectedDay} name={selectedDayName!} expenses={1.23} />
+        <Day
+          number={selectedDay}
+          name={selectedDayName!}
+          expenses={expense}
+          onSubmit={handleSubmit}
+        />
       </Card>
     </div>
   );
