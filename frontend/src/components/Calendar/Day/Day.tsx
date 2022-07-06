@@ -8,9 +8,11 @@ interface DayProps {
 
 const Day: React.FC<DayProps> = ({ number, name, expenses }) => {
   return (
-    <div className=" flex border-b items-center justify-between">
+    <div className="flex border-b items-center justify-between">
       <div className="flex items-center gap-4 p-5 w-[50%]">
-        <div className="text-xl font-bold pr-4 border-r">{number}</div>
+        <div className="w-[50px] flex justify-center items-center text-xl font-bold pr-4 border-r">
+          {number}
+        </div>
         <div className="text-lg">{name}</div>
       </div>
       <div className="w-[50%] p-5">

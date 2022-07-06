@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { months } from '../../mock-data/monthsInAYear';
 import { daysOfWeek } from '../../mock-data/days';
 import { getDaysInCurrentMonth } from '../../utils/getDaysInCurrentMonth';
@@ -15,24 +15,34 @@ interface CalendarProps {
 const Calendar = () => {
   const date = new Date();
   const today = date.getDate();
-  const dayNameIndex = date.getDay();
   const monthIndex = date.getMonth();
+  const currentFullYear = date.getFullYear();
   const [currentMonthIndex, setCurrentMonthIndex] =
     useState<number>(monthIndex);
   const [selectedDay, setSelectedDay] = useState<number>(today);
-  const [selectedDayNameIndex, setSelectedDayNameIndex] =
-    useState<number>(dayNameIndex);
+
+  const nameOfSelectedDay = useMemo(
+    () =>
+      new Date(
+        currentFullYear,
+        currentMonthIndex,
+        selectedDay
+      ).toLocaleDateString('en-us', { weekday: 'long' }),
+    [selectedDay]
+  );
+  const [selectedDayName, setSelectedDayName] =
+    useState<string>(nameOfSelectedDay);
 
   const month = months[currentMonthIndex];
-  const currentFullYear = date.getFullYear();
-  const daysInAMonth = useMemo(() => {
-    return getDaysInCurrentMonth(currentFullYear, currentMonthIndex);
-  }, [currentMonthIndex]);
 
-  const blankDays = getBlankDays(
-    daysOfWeek,
-    currentFullYear,
-    currentMonthIndex
+  const daysInAMonth = useMemo(
+    () => getDaysInCurrentMonth(currentFullYear, currentMonthIndex),
+    [currentMonthIndex]
+  );
+
+  const blankDays = useMemo(
+    () => getBlankDays(daysOfWeek, currentFullYear, currentMonthIndex),
+    [currentMonthIndex]
   );
 
   const onMonthChange = (direction: string) => {
@@ -46,12 +56,16 @@ const Calendar = () => {
     }
   };
 
+  useEffect(() => {
+    setSelectedDayName(nameOfSelectedDay);
+  }, [selectedDay]);
+
   const onDaySelect = (dayNumber: number) => {
     setSelectedDay(dayNumber);
   };
 
   return (
-    <div className="max-w-full w-[600px] h-screen bg-secondary border p-2">
+    <div className="max-w-full min-w-[600px] w-[600px] h-screen bg-secondary border p-2">
       <Card>
         <CalendarHeader
           monthName={month.name}
@@ -66,12 +80,8 @@ const Calendar = () => {
           onClick={onDaySelect}
         />
       </Card>
-      <Card className="mt-3 h-[300px]">
-        <Day
-          number={selectedDay}
-          name={daysOfWeek[selectedDayNameIndex]}
-          expenses={1.23}
-        />
+      <Card className="mt-3 ">
+        <Day number={selectedDay} name={selectedDayName!} expenses={1.23} />
       </Card>
     </div>
   );
