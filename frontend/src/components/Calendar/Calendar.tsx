@@ -11,6 +11,7 @@ import { setDayInformation } from 'utils/setDayInformation';
 import { getNameOfSelectedDay } from 'utils/getNameOfSelectedDay';
 import { useEffect } from 'react';
 import { FormInfoType, FromInfoTypeTwo } from 'types/Form.types';
+import DetailedDayInformation from './Day/DetailedDayInformation';
 
 const Calendar: React.FC = (): JSX.Element => {
   const date = new Date();
@@ -77,32 +78,37 @@ const Calendar: React.FC = (): JSX.Element => {
   }, [selectedDay]);
 
   return (
-    <div className="h-screen sm:p-2">
-      <div className="p-2 sm:p-0">
-        <Card>
-          <CalendarHeader
-            monthName={monthName}
-            dayNames={daysOfWeek}
-            fullYear={currenFullYear}
-            onMonthChange={onMonthChange}
-          />
-          <CalendarDays
-            blankDays={blankDays}
-            numberOfDays={daysWithInfo}
-            activeDayIndex={selectedDay}
-            onClick={onDaySelect}
-          />
-        </Card>
+    <div className="h-screen sm:p-2 sm:flex sm:flex-row">
+      <div className="wrapper">
+        <div className="p-2 sm:p-0">
+          <Card>
+            <CalendarHeader
+              monthName={monthName}
+              dayNames={daysOfWeek}
+              fullYear={currenFullYear}
+              onMonthChange={onMonthChange}
+            />
+            <CalendarDays
+              blankDays={blankDays}
+              numberOfDays={daysWithInfo}
+              activeDayIndex={selectedDay}
+              onClick={onDaySelect}
+            />
+          </Card>
+        </div>
+        <div className="p-2 sm:p-0">
+          <Card className="my-2">
+            <Day
+              number={selectedDay}
+              name={nameOfSelectedDay}
+              expense={expense}
+              onSubmit={handleSubmit}
+            />
+          </Card>
+        </div>
       </div>
-      <div className="p-2 sm:p-0">
-        <Card className="my-2">
-          <Day
-            number={selectedDay}
-            name={nameOfSelectedDay}
-            expense={expense}
-            onSubmit={handleSubmit}
-          />
-        </Card>
+      <div className="sm:max-w-full">
+        <DetailedDayInformation />
       </div>
     </div>
   );
