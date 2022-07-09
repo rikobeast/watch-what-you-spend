@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { useMemo, ReactNode } from 'react';
 
 interface ButtonProps {
   className: string;
@@ -14,7 +14,7 @@ const Button: React.FC<Partial<ButtonProps>> = ({
   text,
   icon,
   onClick,
-}) => {
+}): JSX.Element => {
   return (
     <button className={className} type={type} onClick={onClick}>
       {text ? text : icon}

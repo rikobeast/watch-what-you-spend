@@ -20,7 +20,6 @@ const Input: React.FC<Partial<InputProps>> = ({
   placeholder,
   name,
   value,
-  currency,
   minValue,
   errorMessage,
   onChange,
@@ -37,6 +36,7 @@ const Input: React.FC<Partial<InputProps>> = ({
           value={value}
           min={minValue}
           onChange={onChange}
+          autoComplete="off"
         />
         {errorMessage && (
           <div className="absolute text-red text-md left-2 top-12 mt-1 ">
@@ -44,7 +44,6 @@ const Input: React.FC<Partial<InputProps>> = ({
           </div>
         )}
       </div>
-      {currency && <span>{currency}</span>}
     </>
   );
 };

@@ -1,48 +1,50 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { months } from '../../mock-data/monthsInAYear';
-import { daysOfWeek } from '../../mock-data/days';
-import { getDaysInCurrentMonth } from '../../utils/getDaysInCurrentMonth';
-import CalendarHeader from './CalendarHeader/CalendarHeader';
-import CalendarDays from './CalendarDays/CalendarDays';
-import Card from '../Card/Card';
-import Day from './Day/Day';
-import { getBlankDays } from '../../utils/getBlankDays';
+import React, { useMemo, useState } from 'react';
+import { months } from 'mock-data/monthsInAYear';
+import { daysOfWeek } from 'mock-data/daysOfweek';
+import { getDaysInCurrentMonth } from 'utils/getDaysInCurrentMonth';
+import CalendarHeader from 'components/Calendar/CalendarHeader';
+import CalendarDays from 'components/Calendar/CalendarDays';
+import Card from 'components/Card';
+import Day from 'components/Calendar/Day';
+import { getBlankDays } from 'utils/getBlankDays';
+import { setDayInformation } from 'utils/setDayInformation';
+import { getNameOfSelectedDay } from 'utils/getNameOfSelectedDay';
+import { useEffect } from 'react';
+import { FormInfoType } from 'types/Form.types';
 
-interface CalendarProps {
-  currentMonth: string;
-}
-
-const Calendar = () => {
+const Calendar: React.FC = (): JSX.Element => {
   const date = new Date();
   const today = date.getDate();
   const monthIndex = date.getMonth();
-  const currentFullYear = date.getFullYear();
+  const fullYear = date.getFullYear();
   const [currentMonthIndex, setCurrentMonthIndex] =
     useState<number>(monthIndex);
+  const [currenFullYear, setCurrentFullYear] = useState<number>(fullYear);
   const [selectedDay, setSelectedDay] = useState<number>(today);
   const [expense, setExpense] = useState<number>(0);
 
   const nameOfSelectedDay = useMemo(
-    () =>
-      new Date(
-        currentFullYear,
-        currentMonthIndex,
-        selectedDay
-      ).toLocaleDateString('en-us', { weekday: 'long' }),
+    () => getNameOfSelectedDay(fullYear, currentMonthIndex, selectedDay),
     [selectedDay]
   );
-  const [selectedDayName, setSelectedDayName] =
-    useState<string>(nameOfSelectedDay);
-
-  const month = months[currentMonthIndex];
 
   const daysInAMonth = useMemo(
-    () => getDaysInCurrentMonth(currentFullYear, currentMonthIndex),
+    () => getDaysInCurrentMonth(fullYear, currentMonthIndex),
     [currentMonthIndex]
   );
 
   const blankDays = useMemo(
-    () => getBlankDays(daysOfWeek, currentFullYear, currentMonthIndex),
+    () => getBlankDays(daysOfWeek, fullYear, currentMonthIndex),
+    [currentMonthIndex]
+  );
+
+  const daysWithInfo = useMemo(
+    () => setDayInformation(daysInAMonth),
+    [daysInAMonth]
+  );
+
+  const monthName = useMemo(
+    () => months[currentMonthIndex].name,
     [currentMonthIndex]
   );
 
@@ -61,12 +63,17 @@ const Calendar = () => {
     setSelectedDay(dayNumber);
   };
 
-  const handleSubmit = (value: number) => {
-    setExpense(value);
+  const handleSubmit = (formInfo: FormInfoType, dayIndex: number) => {
+    const { productPrice, productName } = formInfo;
+
+    const priceToNumber = +productPrice.value;
+
+    setExpense(priceToNumber);
+    daysWithInfo[dayIndex - 1].expense = priceToNumber;
   };
 
   useEffect(() => {
-    setSelectedDayName(nameOfSelectedDay);
+    setExpense(daysWithInfo[selectedDay - 1].expense);
   }, [selectedDay]);
 
   return (
@@ -74,14 +81,14 @@ const Calendar = () => {
       <div className="p-2 sm:p-0">
         <Card>
           <CalendarHeader
-            monthName={month.name}
+            monthName={monthName}
             dayNames={daysOfWeek}
-            fullYear={currentFullYear}
+            fullYear={currenFullYear}
             onMonthChange={onMonthChange}
           />
           <CalendarDays
             blankDays={blankDays}
-            numberOfDays={daysInAMonth}
+            numberOfDays={daysWithInfo}
             activeDayIndex={selectedDay}
             onClick={onDaySelect}
           />
@@ -91,8 +98,8 @@ const Calendar = () => {
         <Card className="my-2">
           <Day
             number={selectedDay}
-            name={selectedDayName!}
-            expenses={expense}
+            name={nameOfSelectedDay}
+            expense={expense}
             onSubmit={handleSubmit}
           />
         </Card>

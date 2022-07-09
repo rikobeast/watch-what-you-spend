@@ -1,56 +1,82 @@
 import React, { useState } from 'react';
+import { FormInfoType } from 'types/Form.types';
 import Button from '../../Button/Button';
 import Input from '../../Input/Input';
+
+const initialFormState = {
+  productPrice: {
+    value: '',
+    inputName: 'Product Price',
+  },
+  productName: {
+    value: '',
+    inputName: 'Product Name',
+  },
+};
 
 interface DayProps {
   number: number;
   name: string;
-  expenses?: number;
-  onSubmit: (expense: number) => void;
+  expense?: number;
+  onSubmit: (formInfo: FormInfoType, dayIndex: number) => void;
 }
 
-const Day: React.FC<DayProps> = ({ number, name, expenses, onSubmit }) => {
-  const [inputValue, setInputValue] = useState<string>('');
+const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
+  const [formState, setFormState] = useState(initialFormState);
+  const { productName, productPrice } = formState;
 
   const handleSubmit = () => {
-    onSubmit(Number(inputValue));
-    setInputValue('');
+    onSubmit(formState, number);
+    setFormState(initialFormState);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    const fixedValue = value.replace(/\D/g, '');
+    const { name, value } = event.target;
 
-    setInputValue(fixedValue);
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: {
+        ...(prevState[name as keyof typeof formState] as object),
+        value: value,
+      },
+    }));
   };
 
   return (
     <>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 p-5 w-[50%]">
-          <div className="w-[50px] flex justify-center items-center text-xl font-bold pr-4 border-r border-black-40">
+        <div className="flex items-center gap-4 p-4 w-[50%]">
+          <div className="w-[50px] flex justify-center items-center text-xl font-bold pr-4 border-r border-black">
             {number}
           </div>
           <div className="text-lg">{name}</div>
         </div>
         <div className="w-[50%] p-5">
-          <div className="text-right text-lg">{`${expenses} $`}</div>
+          <div className="text-right text-lg">{`${expense} $`}</div>
         </div>
       </div>
-      <div className="max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between sm:flex-row">
+      <div className="max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between">
         <div className="max-w-full w-full p-2">
           <Input
-            className="max-w-full w-[100%] sm:w-[100%] p-2 border border-black-40 rounded-lg bg-light-blue shadow-sm shadow-black-40"
-            placeholder="Expense"
-            name="expense"
+            className="max-w-full w-[100%] sm:w-[100%] p-2 border border-black rounded-lg bg-dark-secondary shadow-sm shadow-dark-secondary placeholder-dark-primary text-dark-primary"
+            placeholder={productName.inputName}
+            name="productName"
             type="text"
             onChange={handleChange}
-            value={inputValue}
+            value={productName.value}
+          />
+          <Input
+            className="max-w-full w-[100%] sm:w-[100%] p-2 my-1 border border-black rounded-lg bg-dark-secondary shadow-sm shadow-dark-secondary placeholder-dark-primary text-dark-primary"
+            placeholder={productPrice.inputName}
+            name="productPrice"
+            type="text"
+            onChange={handleChange}
+            value={productPrice.value}
           />
         </div>
         <div className="max-w-full w-full p-2">
           <Button
-            className="max-w-full w-[100%] sm:w-[100%] p-2 bg-primary rounded-md shadow-md shadow-black-40 text-white hover:bg-secondary transition duration-300"
+            className="max-w-full w-[100%] sm:w-[100%] p-2 rounded-md shadow-md shadow-black  bg-dark-primary text-white font-bold sm:hover:bg-dark-primaryAccent  transition duration-300"
             type="button"
             text="Submit"
             onClick={handleSubmit}

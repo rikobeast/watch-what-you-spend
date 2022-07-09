@@ -1,6 +1,6 @@
 import React from 'react';
-import BlankItem from '../CalendarItem/BlankItem';
-import CalendarItem from '../CalendarItem/CalendarItem';
+import BlankItem from 'components/Calendar/CalendarItem/BlankItem';
+import CalendarItem from 'components/Calendar/CalendarItem';
 
 interface CaledarDaysProps {
   blankDays: number[];
@@ -26,9 +26,10 @@ const CalendarDays: React.FC<CaledarDaysProps> = ({
       ))}
       {numberOfDays.map((dayOfMonth: any) => (
         <CalendarItem
-          key={dayOfMonth}
-          dayNumber={dayOfMonth}
-          isActive={activeDayIndex === dayOfMonth}
+          key={dayOfMonth.id}
+          dayNumber={dayOfMonth.dayNumber}
+          isActive={activeDayIndex === dayOfMonth.id}
+          expense={dayOfMonth.expense}
           onClick={handleOnDayClick}
         />
       ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BlankItem = () => {
+const BlankItem: React.FC = (): JSX.Element => {
   return <div className="min-w-[60px] h-[60px] mt-2 mb-2 rounded-md" />;
 };
 
