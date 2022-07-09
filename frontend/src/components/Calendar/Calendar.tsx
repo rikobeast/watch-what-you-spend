@@ -70,29 +70,33 @@ const Calendar = () => {
   }, [selectedDay]);
 
   return (
-    <div className=" h-screen p-2">
-      <Card>
-        <CalendarHeader
-          monthName={month.name}
-          dayNames={daysOfWeek}
-          fullYear={currentFullYear}
-          onMonthChange={onMonthChange}
-        />
-        <CalendarDays
-          blankDays={blankDays}
-          numberOfDays={daysInAMonth}
-          activeDayIndex={selectedDay}
-          onClick={onDaySelect}
-        />
-      </Card>
-      <Card className="mt-3 ">
-        <Day
-          number={selectedDay}
-          name={selectedDayName!}
-          expenses={expense}
-          onSubmit={handleSubmit}
-        />
-      </Card>
+    <div className="h-screen">
+      <div className="p-2">
+        <Card>
+          <CalendarHeader
+            monthName={month.name}
+            dayNames={daysOfWeek}
+            fullYear={currentFullYear}
+            onMonthChange={onMonthChange}
+          />
+          <CalendarDays
+            blankDays={blankDays}
+            numberOfDays={daysInAMonth}
+            activeDayIndex={selectedDay}
+            onClick={onDaySelect}
+          />
+        </Card>
+      </div>
+      <div className="p-2">
+        <Card className="my-1">
+          <Day
+            number={selectedDay}
+            name={selectedDayName!}
+            expenses={expense}
+            onSubmit={handleSubmit}
+          />
+        </Card>
+      </div>
     </div>
   );
 };

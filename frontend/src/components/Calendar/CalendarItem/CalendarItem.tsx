@@ -13,8 +13,8 @@ const CalendarItem: React.FC<CalendarItemProps> = ({
 }) => {
   return (
     <div
-      className={`border min-w-[60px] h-[60px] mt-2 mb-2 flex items-center justify-center rounded-md font-bold flex-col transition duration-150 hover:border-red hover:cursor-pointer hover:text-red hover:shadow-md shadow-secondary ${
-        isActive ? 'border-red text-red' : ''
+      className={`border min-w-[45px] min-h-[35px] w-[45px] h-[55px] sm:min-w-[60px] sm:min-h-[60px] mt-2 mb-2 flex items-center justify-center rounded-md font-bold flex-col transition duration-150 hover:border-red hover:cursor-pointer hover:text-red hover:shadow-md shadow-secondary ${
+        isActive ? 'border-red text-red' : 'border-black-40'
       }`}
       onClick={() => onClick(dayNumber)}
     >

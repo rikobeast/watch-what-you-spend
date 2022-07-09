@@ -3,7 +3,7 @@ import Calendar from '../components/Calendar/Calendar';
 
 const Home: NextPage = () => {
   return (
-    <div className="max-w-full w-full bg-primary h-screen">
+    <div className="max-w-full w-full h-screen">
       <Calendar />
     </div>
   );

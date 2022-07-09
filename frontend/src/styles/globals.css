@@ -1,6 +1,8 @@
-html {
-  @apply font-body;
-}
-h1 {
-  @apply text-h1;
+@import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@300;400;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-primary;
 }

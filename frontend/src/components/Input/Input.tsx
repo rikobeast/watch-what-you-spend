@@ -26,7 +26,7 @@ const Input: React.FC<Partial<InputProps>> = ({
   onChange,
 }) => {
   return (
-    <div className="max-w-full w-full p-5">
+    <>
       {label && <label className="m-2 font-bold">{label}</label>}
       <div className="relative">
         <input
@@ -45,7 +45,7 @@ const Input: React.FC<Partial<InputProps>> = ({
         )}
       </div>
       {currency && <span>{currency}</span>}
-    </div>
+    </>
   );
 };
 

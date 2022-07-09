@@ -42,7 +42,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         </div>
         <h1 className="text-h1 p-3 w-[25%] text-right">{fullYear}</h1>
       </div>
-      <div className="max-w-full w-full border-t border-b h-[40px] grid grid-cols-7 grid-flow-row gap-4 pl-6 pr-6 items-center justify-items-center">
+      <div className="max-w-full w-full border-t border-b border-black-40 h-[40px] grid grid-cols-7 grid-flow-row gap-4 pl-6 pr-6 items-center justify-items-center">
         {dayNames.map((day: string) => (
           <p key={day}>{day.slice(0, 3)}</p>
         ))}

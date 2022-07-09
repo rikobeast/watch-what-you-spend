@@ -20,7 +20,7 @@ const CalendarDays: React.FC<CaledarDaysProps> = ({
   };
 
   return (
-    <div className="grid grid-rows-5 grid-cols-7 grid-flow-row gap-4 p-6">
+    <div className="grid grid-rows-5 grid-cols-7 grid-flow-row gap-1 p-4 sm:gap-4 sm:p-1">
       {blankDays.map((blank: any, index) => (
         <BlankItem key={index} />
       ))}
