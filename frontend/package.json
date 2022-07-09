@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "license": "ISC",
+  "author": "Zhivko Minchev",
   "dependencies": {
     "next": "12.2.0",
     "react": "18.2.0",
