@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "wwys",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "formik": "^2.2.9",
     "next": "12.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.4.0",
-    "yup": "^0.32.11"
+    "react-icons": "^4.4.0"
   },
   "devDependencies": {
     "@types/node": "18.0.1",
