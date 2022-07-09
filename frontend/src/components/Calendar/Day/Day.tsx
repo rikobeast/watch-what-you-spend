@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Formik, Form, ErrorMessage } from 'formik';
-import { FormInfoType, FromInfoTypeTwo } from 'types/Form.types';
+import { FormInfoType } from 'types/Form.types';
 import Button from 'components/Button';
 import Input from 'components/Input';
 
@@ -19,11 +18,11 @@ interface DayProps {
   number: number;
   name: string;
   expense?: number;
-  onSubmit: (formInfo: FromInfoTypeTwo, dayIndex: number) => void;
+  onSubmit: (formInfo: FormInfoType, dayIndex: number) => void;
 }
 
 const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
-  const [formState, setFormState] = useState<FromInfoTypeTwo>(initialFormState);
+  const [formState, setFormState] = useState<FormInfoType>(initialFormState);
   const { productName, productPrice } = formState;
 
   const handleSubmit = (event: { preventDefault(): void }) => {
