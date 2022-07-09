@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { FormInfoType } from 'types/Form.types';
-import Button from '../../Button/Button';
-import Input from '../../Input/Input';
+import { Formik, Form, ErrorMessage } from 'formik';
+import { FormInfoType, FromInfoTypeTwo } from 'types/Form.types';
+import Button from 'components/Button';
+import Input from 'components/Input';
 
 const initialFormState = {
   productPrice: {
-    value: '',
+    value: '0',
     inputName: 'Product Price',
   },
   productName: {
@@ -18,14 +19,16 @@ interface DayProps {
   number: number;
   name: string;
   expense?: number;
-  onSubmit: (formInfo: FormInfoType, dayIndex: number) => void;
+  onSubmit: (formInfo: FromInfoTypeTwo, dayIndex: number) => void;
 }
 
 const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
-  const [formState, setFormState] = useState(initialFormState);
+  const [formState, setFormState] = useState<FromInfoTypeTwo>(initialFormState);
   const { productName, productPrice } = formState;
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: { preventDefault(): void }) => {
+    event.preventDefault();
+
     onSubmit(formState, number);
     setFormState(initialFormState);
   };
@@ -55,7 +58,7 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
           <div className="text-right text-lg">{`${expense} $`}</div>
         </div>
       </div>
-      <div className="max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between">
+      <form className="max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between">
         <div className="max-w-full w-full p-2">
           <Input
             className="max-w-full w-[100%] sm:w-[100%] p-2 border border-black rounded-lg bg-dark-secondary shadow-sm shadow-dark-secondary placeholder-dark-primary text-dark-primary"
@@ -69,7 +72,8 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
             className="max-w-full w-[100%] sm:w-[100%] p-2 my-1 border border-black rounded-lg bg-dark-secondary shadow-sm shadow-dark-secondary placeholder-dark-primary text-dark-primary"
             placeholder={productPrice.inputName}
             name="productPrice"
-            type="text"
+            type="number"
+            minValue={0}
             onChange={handleChange}
             value={productPrice.value}
           />
@@ -77,12 +81,12 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
         <div className="max-w-full w-full p-2">
           <Button
             className="max-w-full w-[100%] sm:w-[100%] p-2 rounded-md shadow-md shadow-black  bg-dark-primary text-white font-bold sm:hover:bg-dark-primaryAccent  transition duration-300"
-            type="button"
+            type="submit"
             text="Submit"
             onClick={handleSubmit}
           />
         </div>
-      </div>
+      </form>
     </>
   );
 };

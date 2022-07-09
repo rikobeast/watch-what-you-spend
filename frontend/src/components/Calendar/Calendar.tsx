@@ -10,7 +10,7 @@ import { getBlankDays } from 'utils/getBlankDays';
 import { setDayInformation } from 'utils/setDayInformation';
 import { getNameOfSelectedDay } from 'utils/getNameOfSelectedDay';
 import { useEffect } from 'react';
-import { FormInfoType } from 'types/Form.types';
+import { FormInfoType, FromInfoTypeTwo } from 'types/Form.types';
 
 const Calendar: React.FC = (): JSX.Element => {
   const date = new Date();
@@ -63,13 +63,13 @@ const Calendar: React.FC = (): JSX.Element => {
     setSelectedDay(dayNumber);
   };
 
-  const handleSubmit = (formInfo: FormInfoType, dayIndex: number) => {
-    const { productPrice, productName } = formInfo;
+  const handleSubmit = (formInfo: FromInfoTypeTwo, dayIndex: number) => {
+    const { productPrice } = formInfo;
 
-    const priceToNumber = +productPrice.value;
+    const parsedValue = parseInt(productPrice.value);
 
-    setExpense(priceToNumber);
-    daysWithInfo[dayIndex - 1].expense = priceToNumber;
+    setExpense(parsedValue);
+    daysWithInfo[dayIndex - 1].expense = parsedValue;
   };
 
   useEffect(() => {

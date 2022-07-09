@@ -5,7 +5,7 @@ interface ButtonProps {
   type: 'submit' | 'button' | 'reset';
   text: string;
   icon: ReactNode;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button: React.FC<Partial<ButtonProps>> = ({
