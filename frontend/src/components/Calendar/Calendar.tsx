@@ -70,8 +70,8 @@ const Calendar = () => {
   }, [selectedDay]);
 
   return (
-    <div className="h-screen">
-      <div className="p-2">
+    <div className="h-screen sm:p-2">
+      <div className="p-2 sm:p-0">
         <Card>
           <CalendarHeader
             monthName={month.name}
@@ -87,8 +87,8 @@ const Calendar = () => {
           />
         </Card>
       </div>
-      <div className="p-2">
-        <Card className="my-1">
+      <div className="p-2 sm:p-0">
+        <Card className="my-2">
           <Day
             number={selectedDay}
             name={selectedDayName!}

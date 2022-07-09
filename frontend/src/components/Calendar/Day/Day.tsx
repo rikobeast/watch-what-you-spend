@@ -34,13 +34,13 @@ const Day: React.FC<DayProps> = ({ number, name, expenses, onSubmit }) => {
           <div className="text-lg">{name}</div>
         </div>
         <div className="w-[50%] p-5">
-          <div className="text-right text-lg">{`${expenses}$`}</div>
+          <div className="text-right text-lg">{`${expenses} $`}</div>
         </div>
       </div>
       <div className="max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between sm:flex-row">
         <div className="max-w-full w-full p-2">
           <Input
-            className="max-w-full w-[100%] sm:w-[50%] p-2 border border-black-40 rounded-lg bg-light-blue shadow-sm shadow-black-40"
+            className="max-w-full w-[100%] sm:w-[100%] p-2 border border-black-40 rounded-lg bg-light-blue shadow-sm shadow-black-40"
             placeholder="Expense"
             name="expense"
             type="text"
@@ -50,7 +50,7 @@ const Day: React.FC<DayProps> = ({ number, name, expenses, onSubmit }) => {
         </div>
         <div className="max-w-full w-full p-2">
           <Button
-            className="max-w-full w-[100%] sm:w-[50%] p-2 bg-primary rounded-md shadow-md shadow-black-40 text-white hover:bg-secondary transition duration-300"
+            className="max-w-full w-[100%] sm:w-[100%] p-2 bg-primary rounded-md shadow-md shadow-black-40 text-white hover:bg-secondary transition duration-300"
             type="button"
             text="Submit"
             onClick={handleSubmit}
