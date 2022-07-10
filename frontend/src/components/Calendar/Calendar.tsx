@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { months } from 'data/monthsInAYear';
 import { daysOfWeek } from 'data/daysOfweek';
-import { getDaysInCurrentMonth } from 'utils/getDaysInCurrentMonth';
 import CalendarHeader from 'components/Calendar/CalendarHeader';
 import CalendarDays from 'components/Calendar/CalendarDays';
 import Card from 'components/Card';
@@ -9,10 +8,13 @@ import Day from 'components/Calendar/Day';
 import { getBlankDays } from 'utils/getBlankDays';
 import { setDayInformation } from 'utils/setDayInformation';
 import { getNameOfSelectedDay } from 'utils/getNameOfSelectedDay';
+import { getDaysInCurrentMonth } from 'utils/getDaysInCurrentMonth';
 import { useEffect } from 'react';
 import { FormInfoType } from 'types/Form.types';
-import DetailedDayInformation from './Day/DetailedDayInformation';
 import { Direction } from 'types/Direction.types';
+import { ProductType } from 'types/Product.types';
+import DetailedDayInformation from './Day/DetailedDayInformation';
+import { calculateTotalPriceOfProducts } from 'utils/calculateTotalPriceOfProducts';
 
 const Calendar: React.FC = (): JSX.Element => {
   const date = new Date();
@@ -23,16 +25,22 @@ const Calendar: React.FC = (): JSX.Element => {
     useState<number>(monthIndex);
   const [currentFullYear, setCurrentFullYear] = useState<number>(fullYear);
   const [selectedDay, setSelectedDay] = useState<number>(today);
+  const [products, setProducts] = useState<ProductType[]>([]);
   const [expense, setExpense] = useState<number>(0);
-
-  const nameOfSelectedDay = useMemo(
-    () => getNameOfSelectedDay(fullYear, currentMonthIndex, selectedDay),
-    [selectedDay]
-  );
 
   const daysInAMonth = useMemo(
     () => getDaysInCurrentMonth(currentFullYear, currentMonthIndex),
     [currentMonthIndex, currentFullYear]
+  );
+
+  const totalPrice = useMemo(
+    () => calculateTotalPriceOfProducts(products),
+    [products]
+  );
+
+  const nameOfSelectedDay = useMemo(
+    () => getNameOfSelectedDay(fullYear, currentMonthIndex, selectedDay),
+    [selectedDay]
   );
 
   const blankDays = useMemo(
@@ -78,12 +86,26 @@ const Calendar: React.FC = (): JSX.Element => {
   };
 
   const handleSubmit = (formInfo: FormInfoType, dayIndex: number) => {
-    const { productPrice } = formInfo;
+    const { productPrice, productName } = formInfo;
 
-    const parsedValue = parseInt(productPrice.value);
+    setProducts((prevProducts) => {
+      const newProduct = {
+        id: products.length + 1,
+        name: productName.value,
+        price: parseFloat(productPrice.value),
+      };
+      calendarDays[selectedDay - 1].products = [
+        ...calendarDays[selectedDay - 1].products,
+        newProduct,
+      ];
+      return [...prevProducts, newProduct];
+    });
 
-    setExpense(parsedValue);
-    calendarDays[dayIndex - 1].expense = parsedValue;
+    const parsedValue = parseFloat(productPrice.value);
+
+    setExpense(parsedValue + expense);
+
+    calendarDays[selectedDay - 1].expense = parsedValue + expense;
   };
 
   useEffect(() => {
@@ -114,14 +136,17 @@ const Calendar: React.FC = (): JSX.Element => {
             <Day
               number={selectedDay}
               name={nameOfSelectedDay}
-              expense={expense}
+              expense={calendarDays[selectedDay - 1].expense}
               onSubmit={handleSubmit}
             />
           </Card>
         </div>
       </div>
       <div className="sm:max-w-full">
-        <DetailedDayInformation />
+        <DetailedDayInformation
+          products={calendarDays[selectedDay - 1].products}
+          total={totalPrice}
+        />
       </div>
     </div>
   );

@@ -1,1 +1,1 @@
-export { default } from './DetailedDayInformation';
+export { default } from './DetailedExpense';

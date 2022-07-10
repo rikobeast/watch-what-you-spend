@@ -24,6 +24,7 @@ interface DayProps {
 const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
   const [formState, setFormState] = useState<FormInfoType>(initialFormState);
   const { productName, productPrice } = formState;
+  const isDisabled = productName.value.length <= 0 || productPrice.value <= '0';
 
   const handleSubmit = (event: { preventDefault(): void }) => {
     event.preventDefault();
@@ -79,9 +80,12 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
         </div>
         <div className="max-w-full w-full p-2">
           <Button
-            className="max-w-full w-[100%] sm:w-[100%] p-2 rounded-md shadow-md shadow-black  bg-dark-primary text-white font-bold sm:hover:bg-dark-primaryAccent  transition duration-300"
+            className={`${
+              isDisabled ? 'bg-gray-600 pointer-events-none' : ''
+            } max-w-full w-[100%] sm:w-[100%] p-2 rounded-md shadow-md shadow-black  bg-dark-primary text-white font-bold sm:hover:bg-dark-primaryAccent  transition duration-300`}
             type="submit"
-            text="Submit"
+            text={isDisabled ? 'Please enter product details' : 'Submit'}
+            disabled={isDisabled}
             onClick={handleSubmit}
           />
         </div>

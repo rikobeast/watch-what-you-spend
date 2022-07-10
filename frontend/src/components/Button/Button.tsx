@@ -5,6 +5,7 @@ interface ButtonProps {
   type: 'submit' | 'button' | 'reset';
   text: string;
   icon: ReactNode;
+  disabled?: boolean;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -13,10 +14,16 @@ const Button: React.FC<Partial<ButtonProps>> = ({
   type,
   text,
   icon,
+  disabled,
   onClick,
 }): JSX.Element => {
   return (
-    <button className={className} type={type} onClick={onClick}>
+    <button
+      className={className}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text ? text : icon}
     </button>
   );
