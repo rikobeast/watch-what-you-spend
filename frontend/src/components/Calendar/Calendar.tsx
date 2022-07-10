@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { months } from 'mock-data/monthsInAYear';
-import { daysOfWeek } from 'mock-data/daysOfweek';
+import { months } from 'data/monthsInAYear';
+import { daysOfWeek } from 'data/daysOfweek';
 import { getDaysInCurrentMonth } from 'utils/getDaysInCurrentMonth';
 import CalendarHeader from 'components/Calendar/CalendarHeader';
 import CalendarDays from 'components/Calendar/CalendarDays';
@@ -12,6 +12,7 @@ import { getNameOfSelectedDay } from 'utils/getNameOfSelectedDay';
 import { useEffect } from 'react';
 import { FormInfoType } from 'types/Form.types';
 import DetailedDayInformation from './Day/DetailedDayInformation';
+import { Direction } from 'types/Direction.types';
 
 const Calendar: React.FC = (): JSX.Element => {
   const date = new Date();
@@ -20,7 +21,7 @@ const Calendar: React.FC = (): JSX.Element => {
   const fullYear = date.getFullYear();
   const [currentMonthIndex, setCurrentMonthIndex] =
     useState<number>(monthIndex);
-  const [currenFullYear, setCurrentFullYear] = useState<number>(fullYear);
+  const [currentFullYear, setCurrentFullYear] = useState<number>(fullYear);
   const [selectedDay, setSelectedDay] = useState<number>(today);
   const [expense, setExpense] = useState<number>(0);
 
@@ -30,16 +31,16 @@ const Calendar: React.FC = (): JSX.Element => {
   );
 
   const daysInAMonth = useMemo(
-    () => getDaysInCurrentMonth(fullYear, currentMonthIndex),
-    [currentMonthIndex]
+    () => getDaysInCurrentMonth(currentFullYear, currentMonthIndex),
+    [currentMonthIndex, currentFullYear]
   );
 
   const blankDays = useMemo(
-    () => getBlankDays(daysOfWeek, fullYear, currentMonthIndex),
+    () => getBlankDays(daysOfWeek, currentFullYear, currentMonthIndex),
     [currentMonthIndex]
   );
 
-  const daysWithInfo = useMemo(
+  const calendarDays = useMemo(
     () => setDayInformation(daysInAMonth),
     [daysInAMonth]
   );
@@ -50,13 +51,25 @@ const Calendar: React.FC = (): JSX.Element => {
   );
 
   const onMonthChange = (direction: string) => {
-    if (direction === 'Previous') {
+    if (direction === Direction.PREVIOUS) {
       setCurrentMonthIndex(currentMonthIndex - 1);
-    } else if (direction === 'Next') {
+    } else if (direction === Direction.NEXT) {
       setCurrentMonthIndex(currentMonthIndex + 1);
     } else {
       setCurrentMonthIndex(monthIndex);
       setSelectedDay(today);
+      setCurrentFullYear(fullYear);
+    }
+    checkIfLastOrFirstMonth(direction);
+  };
+
+  const checkIfLastOrFirstMonth = (direction: string) => {
+    if (direction === Direction.NEXT && currentMonthIndex === 11) {
+      setCurrentFullYear(currentFullYear + 1);
+      setCurrentMonthIndex(0);
+    } else if (direction === Direction.PREVIOUS && currentMonthIndex === 0) {
+      setCurrentFullYear(currentFullYear - 1);
+      setCurrentMonthIndex(11);
     }
   };
 
@@ -70,11 +83,11 @@ const Calendar: React.FC = (): JSX.Element => {
     const parsedValue = parseInt(productPrice.value);
 
     setExpense(parsedValue);
-    daysWithInfo[dayIndex - 1].expense = parsedValue;
+    calendarDays[dayIndex - 1].expense = parsedValue;
   };
 
   useEffect(() => {
-    setExpense(daysWithInfo[selectedDay - 1].expense);
+    setExpense(calendarDays[selectedDay - 1].expense);
   }, [selectedDay]);
 
   return (
@@ -85,12 +98,12 @@ const Calendar: React.FC = (): JSX.Element => {
             <CalendarHeader
               monthName={monthName}
               dayNames={daysOfWeek}
-              fullYear={currenFullYear}
+              fullYear={currentFullYear}
               onMonthChange={onMonthChange}
             />
             <CalendarDays
               blankDays={blankDays}
-              numberOfDays={daysWithInfo}
+              numberOfDays={calendarDays}
               activeDayIndex={selectedDay}
               onClick={onDaySelect}
             />

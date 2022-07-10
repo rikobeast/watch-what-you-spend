@@ -1,10 +1,11 @@
 import React from 'react';
 import BlankItem from 'components/Calendar/CalendarItem/BlankItem';
 import CalendarItem from 'components/Calendar/CalendarItem';
+import { CalendarDaysType } from 'types/Day.types';
 
 interface CaledarDaysProps {
   blankDays: number[];
-  numberOfDays: number[];
+  numberOfDays: CalendarDaysType[];
   activeDayIndex: number;
   onClick: (dayNumber: number) => void;
 }
@@ -22,9 +23,9 @@ const CalendarDays: React.FC<CaledarDaysProps> = ({
   return (
     <div className="grid grid-rows-5 grid-cols-7 grid-flow-row gap-1 p-4 sm:gap-4">
       {blankDays.map((blank: any, index) => (
-        <BlankItem key={index} />
+        <BlankItem key={index}/>
       ))}
-      {numberOfDays.map((dayOfMonth: any) => (
+      {numberOfDays.map((dayOfMonth: CalendarDaysType) => (
         <CalendarItem
           key={dayOfMonth.id}
           dayNumber={dayOfMonth.dayNumber}

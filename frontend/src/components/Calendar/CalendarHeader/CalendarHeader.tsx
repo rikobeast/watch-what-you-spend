@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Button from 'components/Button';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { useMemo } from 'react';
+import { Direction } from 'types/Direction.types';
 
 interface CalendarHeaderProps {
   monthName: string;
@@ -21,7 +21,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   };
 
   const dayNamesShort = useMemo(
-    () => dayNames.map((day) => day.slice(0, 3)),
+    () => dayNames.map((dayName: string) => dayName.slice(0, 3)),
     [dayNames]
   );
 
@@ -35,26 +35,26 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           <Button
             className="font-bold p-4 rounded-full sm:hover:bg-dark-primary sm:hover:text-white transition duration-200"
             icon={<FaChevronLeft />}
-            onClick={() => changeMonth('Previous')}
+            onClick={() => changeMonth(Direction.PREVIOUS)}
           />
           <Button
             className="font-bold p-4 rounded-full sm:hover:bg-dark-primary sm:hover:text-white transition duration-200"
             text="Today"
-            onClick={() => changeMonth('Today')}
+            onClick={() => changeMonth(Direction.TODAY)}
           />
           <Button
             className="font-bold p-4 rounded-full sm:hover:bg-dark-primary sm:hover:text-white transition duration-200"
             icon={<FaChevronRight />}
-            onClick={() => changeMonth('Next')}
+            onClick={() => changeMonth(Direction.NEXT)}
           />
         </div>
         <h1 className="text-sm sm:text-lg font-bold p-3 w-[25%] text-right">
           {fullYear}
         </h1>
       </div>
-      <div className="max-w-full w-full border-t border-b border-black h-[40px] grid grid-cols-7 grid-flow-row gap-4 pl-6 pr-6 items-center justify-items-center">
-        {dayNamesShort.map((day: string) => (
-          <p key={day}>{day}</p>
+      <div className="max-w-full w-full border-t border-b border-black h-[40px] grid grid-cols-7 grid-flow-row gap-7 pl-7 pr-7 items-center justify-items-center">
+        {dayNamesShort.map((dayName: string, index) => (
+          <p key={`${dayName} - ${index}`}>{dayName}</p>
         ))}
       </div>
     </>
