@@ -81,8 +81,10 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
         <div className="max-w-full w-full p-2">
           <Button
             className={`${
-              isDisabled ? 'bg-red-400 pointer-events-none text-black' : ''
-            } max-w-full w-[100%] sm:w-[100%] p-2 rounded-md shadow-md shadow-black  bg-dark-primary text-white font-bold sm:hover:bg-dark-primaryAccent  transition duration-300`}
+              isDisabled
+                ? 'bg-red-400 pointer-events-none text-black'
+                : 'bg-dark-primary'
+            } max-w-full w-[100%] sm:w-[100%] p-2 rounded-md shadow-md shadow-black  text-white font-bold sm:hover:bg-dark-primaryAccent  transition duration-300`}
             type="submit"
             text={isDisabled ? 'Please enter product details' : 'Submit'}
             disabled={isDisabled}
