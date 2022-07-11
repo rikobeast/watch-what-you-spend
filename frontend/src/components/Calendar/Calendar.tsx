@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { months } from 'data/monthsInAYear';
 import { daysOfWeek } from 'data/daysOfweek';
 import CalendarHeader from 'components/Calendar/CalendarHeader';
@@ -33,11 +33,6 @@ const Calendar: React.FC = (): JSX.Element => {
     [currentMonthIndex, currentFullYear]
   );
 
-  const totalPrice = useMemo(
-    () => calculateTotalPriceOfProducts(products),
-    [products]
-  );
-
   const nameOfSelectedDay = useMemo(
     () => getNameOfSelectedDay(fullYear, currentMonthIndex, selectedDay),
     [selectedDay]
@@ -58,55 +53,69 @@ const Calendar: React.FC = (): JSX.Element => {
     [currentMonthIndex]
   );
 
-  const onMonthChange = (direction: string) => {
-    if (direction === Direction.PREVIOUS) {
-      setCurrentMonthIndex(currentMonthIndex - 1);
-    } else if (direction === Direction.NEXT) {
-      setCurrentMonthIndex(currentMonthIndex + 1);
-    } else {
-      setCurrentMonthIndex(monthIndex);
-      setSelectedDay(today);
-      setCurrentFullYear(fullYear);
-    }
-    checkIfLastOrFirstMonth(direction);
-  };
+  const totalPrice = useMemo(
+    () => calculateTotalPriceOfProducts(calendarDays[selectedDay - 1].products),
+    [calendarDays[selectedDay - 1].products]
+  );
 
-  const checkIfLastOrFirstMonth = (direction: string) => {
-    if (direction === Direction.NEXT && currentMonthIndex === 11) {
-      setCurrentFullYear(currentFullYear + 1);
-      setCurrentMonthIndex(0);
-    } else if (direction === Direction.PREVIOUS && currentMonthIndex === 0) {
-      setCurrentFullYear(currentFullYear - 1);
-      setCurrentMonthIndex(11);
-    }
-  };
+  const onMonthChange = useCallback(
+    (direction: string) => {
+      if (direction === Direction.PREVIOUS) {
+        setCurrentMonthIndex(currentMonthIndex - 1);
+      } else if (direction === Direction.NEXT) {
+        setCurrentMonthIndex(currentMonthIndex + 1);
+      } else {
+        setCurrentMonthIndex(monthIndex);
+        setSelectedDay(today);
+        setCurrentFullYear(fullYear);
+      }
+      shouldChangeYear(direction);
+    },
+    [currentMonthIndex, currentFullYear, monthIndex, today, fullYear]
+  );
 
-  const onDaySelect = (dayNumber: number) => {
+  const shouldChangeYear = useCallback(
+    (direction: string) => {
+      if (direction === Direction.NEXT && currentMonthIndex === 11) {
+        setCurrentFullYear(currentFullYear + 1);
+        setCurrentMonthIndex(0);
+      } else if (direction === Direction.PREVIOUS && currentMonthIndex === 0) {
+        setCurrentFullYear(currentFullYear - 1);
+        setCurrentMonthIndex(11);
+      }
+    },
+    [currentMonthIndex, currentFullYear]
+  );
+
+  const onDaySelect = useCallback((dayNumber: number) => {
     setSelectedDay(dayNumber);
-  };
+  }, []);
 
-  const handleSubmit = (formInfo: FormInfoType, dayIndex: number) => {
-    const { productPrice, productName } = formInfo;
+  const handleSubmit = useCallback(
+    (formInfo: FormInfoType) => {
+      const { productPrice, productName } = formInfo;
 
-    setProducts((prevProducts) => {
-      const newProduct = {
-        id: products.length + 1,
-        name: productName.value,
-        price: parseFloat(productPrice.value),
-      };
-      calendarDays[selectedDay - 1].products = [
-        ...calendarDays[selectedDay - 1].products,
-        newProduct,
-      ];
-      return [...prevProducts, newProduct];
-    });
+      setProducts((prevProducts) => {
+        const newProduct = {
+          id: calendarDays[selectedDay - 1].products.length + 1,
+          name: productName.value,
+          price: parseFloat(productPrice.value),
+        };
+        calendarDays[selectedDay - 1].products = [
+          ...calendarDays[selectedDay - 1].products,
+          newProduct,
+        ];
+        return [...prevProducts, newProduct];
+      });
 
-    const parsedValue = parseFloat(productPrice.value);
+      const parsedValue = parseFloat(productPrice.value);
 
-    setExpense(parsedValue + expense);
+      setExpense(parsedValue + expense);
 
-    calendarDays[selectedDay - 1].expense = parsedValue + expense;
-  };
+      calendarDays[selectedDay - 1].expense = parsedValue + expense;
+    },
+    [calendarDays, selectedDay, expense]
+  );
 
   useEffect(() => {
     setExpense(calendarDays[selectedDay - 1].expense);

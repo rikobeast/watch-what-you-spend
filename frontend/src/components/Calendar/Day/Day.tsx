@@ -18,7 +18,7 @@ interface DayProps {
   number: number;
   name: string;
   expense?: number;
-  onSubmit: (formInfo: FormInfoType, dayIndex: number) => void;
+  onSubmit: (formInfo: FormInfoType) => void;
 }
 
 const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
@@ -29,7 +29,7 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
   const handleSubmit = (event: { preventDefault(): void }) => {
     event.preventDefault();
 
-    onSubmit(formState, number);
+    onSubmit(formState);
     setFormState(initialFormState);
   };
 
