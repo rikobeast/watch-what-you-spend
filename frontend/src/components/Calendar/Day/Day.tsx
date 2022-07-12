@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormInfoType } from 'types/Form.types';
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -23,8 +23,16 @@ interface DayProps {
 
 const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
   const [formState, setFormState] = useState<FormInfoType>(initialFormState);
+  const [joke, setJoke] = useState<string>('');
+  const [hasToldJoke, setHasToldJoke] = useState<boolean>(false);
   const { productName, productPrice } = formState;
+
   const isDisabled = productName.value.length <= 0 || productPrice.value <= '0';
+
+  const hasJoke = useMemo(
+    () => productPrice.value.length === 10,
+    [productPrice.value]
+  );
 
   const handleSubmit = (event: { preventDefault(): void }) => {
     event.preventDefault();
@@ -45,6 +53,28 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
     }));
   };
 
+  useEffect(() => {
+    if (hasJoke && !hasToldJoke) {
+      setHasToldJoke(true);
+      setJoke(`What are you doing here if you spend this much money?`);
+    }
+  }, [productPrice.value.length]);
+
+  useEffect(() => {
+    let jokeResetTimer: NodeJS.Timeout;
+
+    const resetJoke = () => {
+      setJoke('');
+    };
+    jokeResetTimer = setTimeout(() => {
+      resetJoke();
+    }, 3000);
+
+    return () => {
+      clearTimeout(jokeResetTimer);
+    };
+  }, [hasJoke]);
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -58,7 +88,7 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
           <div className="text-right text-lg">{`${expense} $`}</div>
         </div>
       </div>
-      <form className="max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between">
+      <form className="relative max-w-full w-[100%] flex flex-col items-center justify-between sm:flex sm:items-center sm:justify-between">
         <div className="max-w-full w-full p-2">
           <Input
             className="max-w-full w-[100%] sm:w-[100%] p-2 border border-black rounded-lg bg-dark-secondary shadow-sm shadow-dark-secondary placeholder-dark-primary text-dark-primary"
@@ -78,7 +108,10 @@ const Day: React.FC<DayProps> = ({ number, name, expense, onSubmit }) => {
             value={productPrice.value}
           />
         </div>
-        <div className="max-w-full w-full p-2">
+        {joke.length > 0 ? (
+          <div className="absolute top-[99px] text-dark-accent">{joke}</div>
+        ) : null}
+        <div className="max-w-full w-full p-3 pt-4">
           <Button
             className={`${
               isDisabled
